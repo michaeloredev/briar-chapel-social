@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Comments from "./Comments";
 
 const Post = () => {
   return (
@@ -43,8 +44,9 @@ const Post = () => {
         </p>
       </div>
       {/* INTERACTION */}
-      <div className="flex items-center justify-between text-sm">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between text-sm my-4">
+        <div className="flex gap-8">
+        <div className="flex items-center gap-4 bg-slate-200 p-2 rounded-md">
           <Image
             src="/like.png"
             alt=""
@@ -53,30 +55,42 @@ const Post = () => {
             className="cursor-pointer"
           />
           <span className="text-gray-500">|</span>
-          <span className="text-gray-500">231</span>
+          <span className="text-gray-500">
+            231 <span className="hidden md:inline">Likes</span>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 bg-slate-200 p-2 rounded-md">
           <Image
             src="/comment.png"
             alt=""
-            height={20}
-            width={20}
-            className="h-5 w-5"
+            height={16}
+            width={16}
+            className="cursor-pointer"
           />
+          <span className="text-gray-500">|</span>
+          <span className="text-gray-500">
+            111 <span className="hidden md:inline">Comments</span>
+          </span>
+        </div>
+        </div>
+
+        <div className="flex items-center gap-4  bg-slate-200 p-2 rounded-md">
           <Image
             src="/share.png"
             alt=""
-            height={20}
-            width={20}
-            className="h-5 w-5"
+            height={16}
+            width={16}
+            className="cursor-pointer"
           />
+          <span className="text-gray-500">|</span>
+          <span className="text-gray-500">
+            111 <span className="hidden md:inline">Shares</span>
+          </span>
         </div>
-        <Image
-          src="/bookmark.png"
-          alt=""
-          height={20}
-          width={20}
-          className="h-5 w-5"
-        />
       </div>
+      {/* COMMENTS */}
+      <Comments />
     </div>
   );
 };
