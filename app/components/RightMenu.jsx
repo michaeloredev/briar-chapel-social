@@ -5,11 +5,11 @@ import Advertisement from './Advertisement';
 
 const RightMenu = ({userId}) => {
   return (
-    <div className='flex flex-col gap-6'>
-      <div className="">
+    <div className=''>
+      <div className="flex flex-col gap-6">
         <FriendRequests  />
         <Birthdays />
-        <Advertisement />
+        <Advertisement size="md"/>
       </div>
     </div>
   )
