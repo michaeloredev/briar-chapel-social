@@ -27,6 +27,20 @@ const Birthdays = () => {
           </div>
         </div>
       </div>
+
+      <div className="flex items-center bg-blue-50 rounded-md">
+
+        <div className="flex p-4">
+          <Image src="/gift.png" alt='gift icon' height={32} width={32} className='h-8 w-8'/>
+        </div>
+
+        <div className=" justify-between flex flex-col gap-2">
+          <span className='font-medium'>Upcoming Birthdays</span>
+          <span className='text-sm text-gray-500'>See other upcoming birthdays</span>
+        </div>
+
+      </div>
+
     </div>
   )
 }
