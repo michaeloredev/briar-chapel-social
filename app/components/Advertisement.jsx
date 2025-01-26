@@ -26,7 +26,7 @@ const Advertisement = ({ size }) => {
           />
         </div>
         <div className="flex items-center gap-4">
-        <Image
+          <Image
             src="https://images.pexels.com/photos/27127317/pexels-photo-27127317/free-photo-of-painting-of-flower-branch-leaf-and-stone-with-shadows.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
             alt="ad image"
             width={24}
@@ -39,7 +39,9 @@ const Advertisement = ({ size }) => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           malesuada, eros sit
         </p>
-        <button className="bg-gray-200 text-gray-500 px-2 py-1 rounded-md">Learn More</button>
+        <button className="bg-gray-200 text-gray-500 px-2 py-1 rounded-md">
+          Learn More
+        </button>
       </div>
     </div>
   );
