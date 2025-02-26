@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { prisma } from "@/lib/client";
+import { prisma } from '@/lib/prisma'
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET
@@ -48,39 +48,49 @@ export async function POST(req: Request) {
 
   // Do something with payload
   // For this guide, log payload to console
-  // const { id } = evt.data
+  const { id } = evt.data
   const eventType = evt.type
-
-  // const { id, username, image_url } = evt.data;
-  // console.log(`Received webhook with ID ${id} and event type of ${evt.type}`);
-  // console.log('Username:', username);
-  // console.log('Avatar:', image_url);
   // console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
   // console.log('Webhook payload:', body)
 
-
-  if(eventType === 'user.created'){
+  if (eventType === 'user.created') {
     try{
       await prisma.user.create({
         data: {
-          id:evt.data.id,
+          id: evt.data.id,
           username: evt.data.username,
-          avatar: evt.data.image_url || "/noAvatar.png",
-          // cover: "/noCover.png"
-        }
+          avatar: evt.data.image_url || '/noAvatar.png',
+          cover: '/noCover.png'
+        },
       })
-      return new Response('User created', {
-        status: 200,
-      })
+      return new Response('User Created', { status: 200 })
     }catch(err){
-      console.log(err.stack)
+      console.error('Error: Could not create user', err.stack)
       return new Response('Error: Could not create user', {
         status: 400,
       })
     }
-  }
+  } 
 
-
+  if (eventType === 'user.updated') {
+    try{
+      await prisma.user.update({
+        where: {
+          id: evt.data.id
+        },
+        data: {
+          username: evt.data.username,
+          avatar: evt.data.image_url || '/noAvatar.png',
+        },
+      })
+      return new Response('User Updated', { status: 200 })
+    }catch(err){
+      console.error('Error: Could not update user', err.stack)
+      return new Response('Error: Could not update user', {
+        status: 400,
+      })
+    }
+  } 
 
   return new Response('Webhook received', { status: 200 })
 }
