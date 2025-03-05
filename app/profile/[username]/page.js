@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import Feed from "@/app/components/Feed";
 import LeftMenu from "@/app/components/LeftMenu";
 import RightMenu from "@/app/components/RightMenu";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-
 
 const ProfilePage = async ({ params }) => {
   // console.log(params, 'this is params');
@@ -13,22 +13,38 @@ const ProfilePage = async ({ params }) => {
   const username = resolvedParams.username;
 
   const user = await prisma.user.findFirst({
-    where:{
-      username
+    where: {
+      username,
     },
     include: {
       _count: {
         select: { posts: true, followers: true, following: true },
-      }
-    }
+      },
+    },
   });
 
-  if(!user)return notFound();
-
+  if (!user) return notFound();
   const postCount = user._count.posts;
   const followerCount = user._count.followers;
   const followingCount = user._count.following;
-  
+
+  const { userId: currentUserId } = await auth();
+
+  let isBlocked;
+
+  if (currentUserId) {
+    const resp = await prisma.block.findFirst({
+      where: {
+        blockerId: user.id,
+        blockedId: currentUserId,
+      },
+    });
+    if (resp) isBlocked = true;
+  } else {
+    isBlocked = false;
+  }
+
+  if (isBlocked) return notFound();
 
   return (
     <div className="flex gap-6 p-6">
@@ -39,21 +55,18 @@ const ProfilePage = async ({ params }) => {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center">
             <div className="w-full h-64 relative">
+              <Image src={user?.cover} alt="" fill className="object-cover" />
               <Image
-                src={user?.cover}
-                alt=""
-                fill
-                className="object-cover"
-              />
-              <Image
-              src="https://images.pexels.com/photos/30404100/pexels-photo-30404100/free-photo-of-man-standing-on-collo-port-pier-in-algeria.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src={user?.avatar ||  "noAvatar.png"}
                 alt=""
                 width={128}
                 height={128}
                 className="object-cover w-32 h-32 rounded-full absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-white z-10"
               />
             </div>
-            <h1 className="mt-20 mb-4 text-2xl font-medium">{user.name ? user.name + ' ' + user.surname  : user.username}</h1>
+            <h1 className="mt-20 mb-4 text-2xl font-medium">
+              {user.name ? user.name + " " + user.surname : user.username}
+            </h1>
             <div className="flex items-center justify-center gap-12 mb-4">
               <div className="flex flex-col items-center">
                 <span className="font-semibold">Posts</span>
@@ -73,7 +86,7 @@ const ProfilePage = async ({ params }) => {
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">
-        <RightMenu userId="test" />
+        <RightMenu user={user} />
       </div>
     </div>
   );

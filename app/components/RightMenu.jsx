@@ -5,14 +5,17 @@ import Advertisement from './Advertisement';
 import UserInfoCard from './UserInfoCard';
 import UserMediaCard from './UserMediaCard';
 
-const RightMenu = ({userId}) => {
+const RightMenu = ({user}) => {
+
+console.log(user, 'this is user!!!!');
+
   return (
     <div className=''>
       <div className="flex flex-col gap-6">
-        {userId && (
+        {user && (
           <>
-          <UserInfoCard userId={userId} />
-          <UserMediaCard userId={userId} />
+          <UserInfoCard userId={user} />
+          <UserMediaCard userId={user} />
           </>
         )}
         <FriendRequests  />
