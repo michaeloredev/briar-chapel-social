@@ -1,7 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import { auth } from '@clerk/nextjs/server';
+import { prisma } from "@/lib/client";
 
 const AddPost = () => {
+
+
+
+
   return (
     <div className="p-4 bg-white border border-gray-200 shadow-md rounded-lg flex gap-4 justify-between text-sm items-center">
       {/* {AVATAR} */}
@@ -14,9 +20,10 @@ const AddPost = () => {
       />
       {/* {POST} */}
       <div className="flex-1">
+        <form action="">
         <div className="flex gap-4">
           <textarea
-            name=""
+            name="description"
             id=""
             className="bg-slate-100 flex-1 p-2"
             placeholder="Whats on your mind?"
@@ -28,7 +35,10 @@ const AddPost = () => {
             width={20}
             className="w-5 h-5 self-end"
           />
+          <button>Send</button>
+          
         </div>
+        </form>
         <div className="flex items-center gap-4 mt-4 text-gray-400 flex-wrap">
           <div className="flex items-center gap-2 font-bold cursor-pointer">
             <Image src="/addimage.png" alt="" height={20} width={20} />

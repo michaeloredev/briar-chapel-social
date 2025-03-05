@@ -14,7 +14,7 @@ const UserInfoCard = ({ userId }) => {
       {/* BOTTOM */}
       <div className="flex flex-col gap-4 text-gray-500">
         <div className="flex items-center gap-2">
-          <span className="text-lg text-black">Mike Ore</span>
+          <span className="text-lg text-black">poop</span>
           <span className="text-sm">@orebot21</span>
         </div>
         <p>
