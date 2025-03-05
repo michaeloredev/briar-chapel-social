@@ -1,10 +1,35 @@
-import React from "react";
+import { notFound } from "next/navigation";
 import Feed from "@/app/components/Feed";
 import LeftMenu from "@/app/components/LeftMenu";
 import RightMenu from "@/app/components/RightMenu";
 import Image from "next/image";
+import { prisma } from "@/lib/prisma";
 
-const ProfilePage = () => {
+
+const ProfilePage = async ({ params }) => {
+  // console.log(params, 'this is params');
+
+  const resolvedParams = await params;
+  const username = resolvedParams.username;
+
+  const user = await prisma.user.findFirst({
+    where:{
+      username
+    },
+    include: {
+      _count: {
+        select: { posts: true, followers: true, following: true },
+      }
+    }
+  });
+
+  if(!user)return notFound();
+
+  const postCount = user._count.posts;
+  const followerCount = user._count.followers;
+  const followingCount = user._count.following;
+  
+
   return (
     <div className="flex gap-6 p-6">
       <div className="hidden xl:block w-[20%]">
@@ -15,7 +40,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center justify-center">
             <div className="w-full h-64 relative">
               <Image
-                src="https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src={user?.cover}
                 alt=""
                 fill
                 className="object-cover"
@@ -28,19 +53,19 @@ const ProfilePage = () => {
                 className="object-cover w-32 h-32 rounded-full absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-white z-10"
               />
             </div>
-            <h1 className="mt-20 mb-4 text-2xl font-medium">Mike Ore</h1>
+            <h1 className="mt-20 mb-4 text-2xl font-medium">{user.name ? user.name + ' ' + user.surname  : user.username}</h1>
             <div className="flex items-center justify-center gap-12 mb-4">
               <div className="flex flex-col items-center">
                 <span className="font-semibold">Posts</span>
-                <span className="text-gray-500">1,000</span>
+                <span className="text-gray-500">{postCount}</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="font-semibold">Followers</span>
-                <span className="text-gray-500">153</span>
+                <span className="text-gray-500">{followerCount}</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="font-semibold">Following</span>
-                <span className="text-gray-500">254</span>
+                <span className="text-gray-500">{followingCount}</span>
               </div>
             </div>
           </div>
