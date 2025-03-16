@@ -14,8 +14,8 @@ console.log(user, 'this is user!!!!');
       <div className="flex flex-col gap-6">
         {user && (
           <>
-          <UserInfoCard userId={user} />
-          <UserMediaCard userId={user} />
+          <UserInfoCard user={user} />
+          <UserMediaCard user={user} />
           </>
         )}
         <FriendRequests  />
